@@ -1,4 +1,9 @@
 #lang racket/base
+(provide RS)
+(provide getFace)
+(provide getValue)
+(provide getColumn)
+(provide getRow)
 
 ;; Rubik's cube simulation
 
@@ -155,11 +160,16 @@
 ;; main
 
 (define (RS X Cube Movs)
-  (cond ((null? Cube) (RS X (buildCube X '(v r az n am b)) Movs) )
+  (cond ((null? Cube) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
     (else (moveCube X Cube Movs))))
   
-(RS 2 '() '("F1I"))
-
+(RS 3 '() '("F1I"))
+(getValue '(((green green green) (green green green) (green green green))
+  ((white white white) (red red red) (red red red))
+  ((blue blue blue) (blue blue blue) (blue blue blue))
+  ((yellow yellow yellow) (orange orange orange) (orange orange orange))
+  ((red red red) (yellow yellow yellow) (yellow yellow yellow))
+  ((orange orange orange) (white white white) (white white white))) 0 0 0)
 
 
 
