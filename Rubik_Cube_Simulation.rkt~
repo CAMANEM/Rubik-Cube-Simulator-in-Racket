@@ -1,7 +1,5 @@
 #lang racket/base
-
-(provide buildCube)
-(provide moveCube)
+(provide RS)
 (provide getFace)
 (provide getValue)
 (provide getColumn)
@@ -87,10 +85,10 @@
 
 (define (moveCube X Cube Movs)
   (cond ((null? Movs) Cube)
-    ((and (equal? (substring (car Movs) 0 1) "C") (equal? (substring (car Movs) 2 3) "B") ) (moveColumn X Cube (- (string->number (substring (car Movs)1 2)) 1) 0 '(3 0 1 2))) ;; El primer 0 se debe cambiar por la columna especificada
-    ((and (equal? (substring (car Movs) 0 1) "C") (equal? (substring (car Movs) 2 3) "A") ) (moveColumn X Cube (- (string->number (substring (car Movs)1 2)) 1) 0 '(1 2 3 0))) ;; El primer 0 se debe cambiar por la columna especificada
-    ((and (equal? (substring (car Movs) 0 1) "F") (equal? (substring (car Movs) 2 3) "D") ) (moveRow X Cube (- (string->number (substring (car Movs)1 2)) 1) 0 '(4 5 3 1))) ;; El primer 0 se debe cambiar por la columna especificada
-    ((and (equal? (substring (car Movs) 0 1) "F") (equal? (substring (car Movs) 2 3) "I") ) (moveRow X Cube (- (string->number (substring (car Movs)1 2)) 1) 0 '(5 4 1 3))) ;; El primer 0 se debe cambiar por la columna especificada
+    ((equal? (car Movs) "C1B") (moveColumn X Cube 0 0 '(3 0 1 2))) ;; El primer 0 se debe cambiar por la columna especificada
+    ((equal? (car Movs) "C1A") (moveColumn X Cube 0 0 '(1 2 3 0))) ;; El primer 0 se debe cambiar por la columna especificada
+    ((equal? (car Movs) "F1D") (moveRow X Cube 0 0 '(4 5 3 1))) ;; El primer 0 se debe cambiar por la columna especificada
+    ((equal? (car Movs) "F1I") (moveRow X Cube 0 0 '(5 4 1 3))) ;; El primer 0 se debe cambiar por la columna especificada
     (else ("No manejado"))
   )
 )
@@ -159,25 +157,19 @@
 )
 
 
+;; main
 
-;; arriba 1 2 3 0 4 5
-;; abajo 3 0 1 2 4 5
-
-;; izquierda 0 5 2 4 1 3
-;; derecha 0 4 2 5 3 1
-
-;;cuidado con las rotaciones laterales!!!
-
-
-
+(define (RS X Cube Movs)
+  (cond ((null? Cube) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
+    (else (moveCube X Cube Movs))))
   
-;(RS 3 '() '("F1I"))
-;(getValue '(((green green green) (green green green) (green green green))
-;  ((white white white) (red red red) (red red red))
-;  ((blue blue blue) (blue blue blue) (blue blue blue))
-;  ((yellow yellow yellow) (orange orange orange) (orange orange orange))
-;  ((red red red) (yellow yellow yellow) (yellow yellow yellow))
-;  ((orange orange orange) (white white white) (white white white))) 0 0 0)
+(RS 3 '() '("F1I"))
+(getValue '(((green green green) (green green green) (green green green))
+  ((white white white) (red red red) (red red red))
+  ((blue blue blue) (blue blue blue) (blue blue blue))
+  ((yellow yellow yellow) (orange orange orange) (orange orange orange))
+  ((red red red) (yellow yellow yellow) (yellow yellow yellow))
+  ((orange orange orange) (white white white) (white white white))) 0 0 0)
 
 
 

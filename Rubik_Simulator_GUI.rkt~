@@ -1,8 +1,6 @@
 #lang scheme
 (require (lib "graphics.ss" "graphics")) (open-graphics)
-(require plot racket/class racket/gui/base)
 (require "Rubik_Cube_Simulation.rkt")
-(require"TP.rkt")
 
 (define i 0)
 (define j 0)
@@ -46,28 +44,13 @@
         (else (get (= x 1) (cdr lista)))))
 
 
-(define (drawingCycle X Cube Movs) 
-  (cond ((null? Movs) (print "drawing finished")) 
-        (else (sleep/yield 3) (dibujarMatriz X (moveCube X Cube Movs)) (drawingCycle X (moveCube X Cube Movs) (cdr Movs))) 
-  ) 
-)
+(dibujarMatriz 6 (RS 6 '() '("C1A"))) 
 
-
-(define (RS X Cube Movs)
-  (cond ((null? Cube) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
-    ((filter X Movs) (dibujarMatriz X Cube) (drawingCycle X Cube Movs))
-    (else (print "found Error in TP validation"))
-  )
-)
-
-(RS 3 '() '("C3B"))
-
-;(sleep 2)
-;(dibujarMatriz 3 (RS 6 '() '("C1A"))) 
 ;(for([i(in-range 2 7 1)])
 ;  (dibujarMatriz i)
 ;  (sleep 1)
 ;  )
+
 
 
 
