@@ -60,7 +60,7 @@
   )
 )
 
-(RS 3 '() '("C3B"))
+(RS 3 '() '("F1D" "C3B"))
 
 ;(sleep 2)
 ;(dibujarMatriz 3 (RS 6 '() '("C1A"))) 
