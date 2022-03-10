@@ -38,7 +38,7 @@
 
 (define (limpiarVentana)
   ((clear-viewport ventana))
-  ((draw-solid-rectangle ventana)(make-posn 0 0) width height "gray")
+  ((draw-solid-rectangle ventana)(make-posn 0 0) width height "black")
   )
 
 (define (get x lista)

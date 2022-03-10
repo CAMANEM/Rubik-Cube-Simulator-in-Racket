@@ -31,3 +31,29 @@
 (define (middle x)
   (cond ((string->number (substring (first x) 1 2)) #t)
          (else #f)))
+
+
+(define (user_filter n x)
+  (cond((and (not (null? x)) (faces x) (config n x))  )))
+
+(define (faces x)
+  (cond((equal? 6 (length x)) #t)
+       (else #f)))
+
+(define (config n x)
+  (cond ((null? x) #t)
+        (( and (equal? n (length (car x))) (config_2 n (car x))) (config n (cdr x)) )
+        (else #f)))
+
+; x = cara
+; car x =  fila
+(define (config_2 n x)
+  (cond ((null? x) #t)
+        ((and (equal? n (length (car x))) (check (car x) `("red" "orange" "blue" "green" "yellow" "white"))) (config_2 n (cdr x)) )
+        (else #f)))
+
+(define (check x c)
+  (cond ((null? x) #t)
+        ((list? (member (car x) c)) (check `(cdr x) c))
+        ))
+
