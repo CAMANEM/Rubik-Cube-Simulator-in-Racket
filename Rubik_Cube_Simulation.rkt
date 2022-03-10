@@ -7,10 +7,6 @@
 (provide getColumn)
 (provide getRow)
 
-;; Rubik's cube simulation
-
-
-;; ( ([b b  ]) () () () () ())
 
 
 ;; Comprueba si un valor se encuentra en la lista:
@@ -29,7 +25,7 @@
   )
 )
 
-;(generateRow 2 0 'b)
+
 
 ;; creates a cube's face
 
@@ -50,7 +46,6 @@
 
 
 ;; Get a value by position
-;; (getValue '(((v v) (v v)) ((r r) (r r)) ((az az) (az az)) ((n n) (n n)) ((am am) (am am)) ((b b) (b b))) 0 0 0)
 
 (define (getValue Cube face i j)
   (getColumn (getRow (getFace Cube face 0) i 0) j 0)
@@ -97,6 +92,12 @@
 
 
 ;; Do a row movement
+;; X: cube size
+;; originalCube: previous cube
+;; new_i: index of row affected by the movement
+;; actual_face: index of the creating face
+;; faces_moved: list in order of index with the affected faces tha have to be used to rewrite
+;; dir: direction of the movement (A, B, D or I)
 
 (define (moveRow X originalCube new_i actual_face faces_moved dir)
   (cond ((equal? 6 actual_face) (append '() ))
@@ -111,6 +112,11 @@
 
 
 ;; creates a changed cube's face by row movement
+;; X: cube size
+;; originalCube: previous cube
+;; new_i: index of row affected by the movement
+;; actual_face: index of the creating face
+;; faces_moved: list in order of index with the affected faces tha have to be used to rewrite
 
 (define (generateChangedFace_R X originalCube i new_i actual_face faces_moved)
   (cond ((equal? X i) (append '()) )
@@ -122,6 +128,10 @@
 
 
 ;; creates a row by row movement
+;; X: cube size
+;; originalCube: previous cube
+;; new_i: index of row affected by the movement
+;; face: index of the creating face
 
 (define (generateChangedRow_R X originalCube i j new_i face new_face)
   (cond ((equal? X j) (append '()))
@@ -135,6 +145,12 @@
 
 
 ;; Do a Column movement
+;; X: cube size
+;; originalCube: previous cube
+;; new_j: index of column affected by the movement
+;; actual_face: index of the creating face
+;; faces_moved: list in order of index with the affected faces tha have to be used to rewrite
+;; dir: direction of the movement (A, B, D or I)
 
 (define (moveColumn X originalCube new_j  actual_face faces_moved dir)
   (cond ((equal? 6 actual_face) (append '() ))
@@ -142,27 +158,38 @@
         ((and (equal? new_j 0) (equal? actual_face 4) (equal? dir "A")) (append (list (rotateCounterClockwise X originalCube actual_face (- X 1))) (moveColumn  X originalCube new_j (+ 1 actual_face) faces_moved dir)))
         ((and (equal? new_j (- X 1)) (equal? actual_face 5) (equal? dir "A")) (append (list (rotateClockwise X originalCube actual_face 0)) (moveColumn  X originalCube new_j (+ 1 actual_face) faces_moved dir)) )
         ((and (equal? new_j (- X 1)) (equal? actual_face 5) (equal? dir "B")) (append (list (rotateCounterClockwise X originalCube actual_face (- X 1))) (moveColumn  X originalCube new_j (+ 1 actual_face) faces_moved dir)) )
-    ((null? faces_moved) (append (list (generateChangedFace X originalCube 0 new_j actual_face faces_moved))  (moveColumn  X originalCube new_j (+ 1 actual_face) faces_moved dir)))
-    (else (append (list (generateChangedFace X originalCube 0 new_j actual_face faces_moved))  (moveColumn  X originalCube new_j (+ 1 actual_face) (cdr faces_moved) dir)))
+    ((null? faces_moved) (append (list (generateChangedFace X originalCube 0 new_j actual_face faces_moved (- X 1)))  (moveColumn  X originalCube new_j (+ 1 actual_face) faces_moved dir)))
+    (else (append (list (generateChangedFace X originalCube 0 new_j actual_face faces_moved (- X 1)))  (moveColumn  X originalCube new_j (+ 1 actual_face) (cdr faces_moved) dir)))
   )
 )
 
 
 ;; creates a changed cube's face by column movement
+;; X: cube size
+;; originalCube: previous cube
+;; new_j: index of column affected by the movement
+;; actual_face: index of the creating face
+;; faces_moved: list in order of index with the affected faces tha have to be used to rewrite
 
-(define (generateChangedFace X originalCube i new_j actual_face faces_moved)
+(define (generateChangedFace X originalCube i new_j actual_face faces_moved i_invert)
   (cond ((equal? X i) (append '()) )
-    ((null? faces_moved)  (append (list (generateChangedRow X originalCube i 0 7 actual_face faces_moved)) (generateChangedFace X originalCube (+ 1 i) 7 actual_face faces_moved) )) ;; 7 para que no suceda
-    (else (append (list(generateChangedRow X originalCube i 0 new_j actual_face (car faces_moved))) (generateChangedFace X originalCube (+ 1 i) new_j actual_face faces_moved)))
+    ((null? faces_moved)  (append (list (generateChangedRow X originalCube i 0 7 actual_face faces_moved i_invert)) (generateChangedFace X originalCube (+ 1 i) 7 actual_face faces_moved (- i_invert 1)) )) ;; 7 para que no suceda
+    (else (append (list(generateChangedRow X originalCube i 0 new_j actual_face (car faces_moved) i_invert)) (generateChangedFace X originalCube (+ 1 i) new_j actual_face faces_moved (- i_invert 1))))
   )
 )
 
-;; creates a by row a column movement
+;; creates a row by a column movement
+;; X: cube size
+;; originalCube: previous cube
+;; new_j: index of column affected by the movement
+;; face: index of the creating face
+;; new_face: index of the creating face
 
-(define (generateChangedRow X originalCube i j new_j face new_face)
+(define (generateChangedRow X originalCube i j new_j face new_face i_invert)
   (cond ((equal? X j) (append '()))
-    ((equal? j new_j) (append (list (getValue originalCube new_face i j)) (generateChangedRow X originalCube i (+ 1 j) new_j face new_face) ))
-    (else (append (list (getValue originalCube face i j)) (generateChangedRow X originalCube i (+ 1 j) new_j face new_face)))
+    ;((and (equal? face 3) (equal? j new_j)) (append (list (getValue originalCube new_face i_invert j)) (generateChangedRow X originalCube i (+ 1 j) new_j face new_face i_invert) ));parche 
+    ((equal? j new_j) (append (list (getValue originalCube new_face i j)) (generateChangedRow X originalCube i (+ 1 j) new_j face new_face i_invert) ))
+    (else (append (list (getValue originalCube face i j)) (generateChangedRow X originalCube i (+ 1 j) new_j face new_face i_invert)))
   )
 )
 
@@ -181,6 +208,9 @@
 )
 
 ;; build the rotated row clockwise
+;; X: cube size
+;; Cube: original cube
+;; n_face: index of the face to rotate
 
 (define (generateRowClockwise X Cube n_face i j)
   (cond ((equal? i -1) (append '()))
@@ -193,7 +223,7 @@
 ;; X: cube size
 ;; Cube: original cube
 ;; n_face: index of the face to rotate
-;; j: indez that should start at X-1
+;; j: index that should start at X-1
 
 (define (rotateCounterClockwise X Cube n_face j)
   (cond ((equal? j -1) (append '()))
@@ -213,38 +243,7 @@
         )
   )
 
-;(rotateCounterClockwise 2 '((("green" "green") ("green" "green")) (("red" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))
-;                                                  (("red" "white") ("red" "white"))) 5 1)
-
-
-;(rotateClockwise 2 '((("green" "green") ("green" "green")) (("red" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))
-;                                                   (("red" "white") ("red" "white"))) 5 0)
 
 
 ;; --------- END ROTATIONS ---------
 
-
-;; arriba 1 2 3 0 4 5
-;; abajo 3 0 1 2 4 5
-
-;; izquierda 0 5 2 4 1 3
-;; derecha 0 4 2 5 3 1
-
-;;cuidado con las rotaciones laterales!!!
-
-
-
-  
-;(RS 3 '() '("F1I"))
-;(getValue '(((green green green) (green green green) (green green green))
-;  ((white white white) (red red red) (red red red))
-;  ((blue blue blue) (blue blue blue) (blue blue blue))
-;  ((yellow yellow yellow) (orange orange orange) (orange orange orange))
-;  ((red red red) (yellow yellow yellow) (yellow yellow yellow))
-;  ((orange orange orange) (white white white) (white white white))) 0 0 0)
-
-
-
-
-
-;; '(((v v) (v v)) ((r r) (r r)) ((az az) (az az)) ((n n) (n n)) ((am am) (am am)) ((b b) (b b)))

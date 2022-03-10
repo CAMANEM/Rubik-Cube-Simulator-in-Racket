@@ -52,15 +52,27 @@
   ) 
 )
 
+(define (validateCube X Cube)
+  (cond ((and (equal? (length Cube) 6)  (equal? (length (car Cube) ) X) (equal? (length (caar Cube)) X)) #true)
+        (else #false)
+        )
+  )
+
 
 (define (RS X Cube Movs)
   (cond ((null? Cube) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
     ((filter X Movs) (dibujarMatriz X Cube) (drawingCycle X Cube Movs))
-    (else (print "found Error in TP validation")(close-viewport ventana))
+    (else (print "found Error in validation")(close-viewport ventana))
   )
 )
 
-(RS 3 '() '("F1D" "C3B"))
+;(RS 2 '( (("green" "green") ("green" "green")) (("red" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))
+;                                               (("white" "white") ("white" "white"))) '("C2A" "F1D"))
+
+(RS 3 '() '("F1D" "C3B" "C3B"))
+
+
+;;Agregar validacion (and (equal? (length Cube) 6) (equal? (lenght (car Cube)) X) 
 
 ;(sleep 2)
 ;(dibujarMatriz 3 (RS 6 '() '("C1A"))) 
