@@ -105,8 +105,8 @@
         ((and (equal? new_i 0) (equal? actual_face 0) (equal? dir "D")) (append (list (rotateCounterClockwise X originalCube actual_face (- X 1))) (moveRow  X originalCube new_i (+ 1 actual_face) faces_moved dir)))
         ((and (equal? new_i (- X 1)) (equal? actual_face 2) (equal? dir "D")) (append (list (rotateClockwise X originalCube actual_face 0)) (moveRow  X originalCube new_i (+ 1 actual_face) faces_moved dir)))
         ((and (equal? new_i (- X 1)) (equal? actual_face 2) (equal? dir "I")) (append (list (rotateCounterClockwise X originalCube actual_face (- X 1))) (moveRow  X originalCube new_i (+ 1 actual_face) faces_moved dir)))
-    ((miembro? actual_face '(4 5 3 1)) (append (list (generateChangedFace_R X originalCube 0 new_i actual_face faces_moved))  (moveRow  X originalCube new_i (+ 1 actual_face) (cdr faces_moved) dir)) )
-    (else (append (list (generateChangedFace_R X originalCube 0 new_i actual_face faces_moved))  (moveRow  X originalCube new_i (+ 1 actual_face) faces_moved dir)))
+    ((miembro? actual_face '(4 5 3 1)) (append (list (generateChangedFace_R X originalCube 0 new_i actual_face faces_moved (- X 1)))  (moveRow  X originalCube new_i (+ 1 actual_face) (cdr faces_moved) dir)) )
+    (else (append (list (generateChangedFace_R X originalCube 0 new_i actual_face faces_moved (- X 1)))  (moveRow  X originalCube new_i (+ 1 actual_face) faces_moved dir)))
   )
 )
 
@@ -118,10 +118,11 @@
 ;; actual_face: index of the creating face
 ;; faces_moved: list in order of index with the affected faces tha have to be used to rewrite
 
-(define (generateChangedFace_R X originalCube i new_i actual_face faces_moved)
+(define (generateChangedFace_R X originalCube i new_i actual_face faces_moved i_inverted)
   (cond ((equal? X i) (append '()) )
-    ((miembro? actual_face '(4 5 3 1)) (append (list(generateChangedRow_R X originalCube i 0 new_i actual_face (car faces_moved))) (generateChangedFace_R X originalCube (+ 1 i) new_i actual_face faces_moved)) ) ;; 7 para que no suceda
-    (else (append (list (generateChangedRow_R X originalCube i 0 7 actual_face faces_moved)) (generateChangedFace_R X originalCube (+ 1 i) new_i actual_face faces_moved) ))
+        ((equal? actual_face 3) (append (list(generateChangedRow_R X originalCube i 0 new_i actual_face (car faces_moved) i_inverted)) (generateChangedFace_R X originalCube (+ 1 i) new_i actual_face faces_moved (- i_inverted 1))))
+    ((miembro? actual_face '(4 5 3 1)) (append (list(generateChangedRow_R X originalCube i 0 new_i actual_face (car faces_moved) i_inverted)) (generateChangedFace_R X originalCube (+ 1 i) new_i actual_face faces_moved i_inverted)) ) ;; 7 para que no suceda
+    (else (append (list (generateChangedRow_R X originalCube i 0 7 actual_face faces_moved i_inverted)) (generateChangedFace_R X originalCube (+ 1 i) new_i actual_face faces_moved i_inverted) ))
   )
 )
 
@@ -133,10 +134,12 @@
 ;; new_i: index of row affected by the movement
 ;; face: index of the creating face
 
-(define (generateChangedRow_R X originalCube i j new_i face new_face)
+(define (generateChangedRow_R X originalCube i j new_i face new_face i_inverted)
   (cond ((equal? X j) (append '()))
-  ((equal? i new_i) (append (list (getValue originalCube new_face i j)) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face) ))
-  (else (append (list (getValue originalCube face i j)) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face)))
+        ((and (equal? face 3) (equal? i (- X new_i 1))) (append (list (getValue originalCube new_face new_i (- X j 1))) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
+        ((and (equal? new_face 3) (equal? i (- X new_i 1))) (print "hola") (append (list (getValue originalCube new_face new_i (- X j 1))) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
+  ((and (equal? i new_i) (not (equal? face 3)) (not (equal? new_face 3))) (append (list (getValue originalCube new_face i j)) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
+  (else (append (list (getValue originalCube face i j)) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted)))
   )
 )
 ;;(generateChangedRow_R 2 '(((v v) (v v)) ((r r) (r r)) ((az az) (az az)) ((n n) (n n)) ((am am) (am am)) ((b b) (b b))) 0 0 0 0 4)

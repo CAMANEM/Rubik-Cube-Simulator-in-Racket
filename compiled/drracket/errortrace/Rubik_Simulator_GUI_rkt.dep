@@ -1,1 +1,0 @@
-("7.2" racket ("e24d5e82ae94da9e5ceb182f31b9ef0b714a8442" . "23d9ad0e24f11af2565343822f2fed017a1ac463") #"/home/camanem/Documents/Racket/Rubik-sCube-in-Racket/Rubik_Cube_Simulation.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"graphics" #"graphics.rkt") (collects #"scheme" #"main.rkt") (collects #"scheme" #"runtime-config.rkt"))
