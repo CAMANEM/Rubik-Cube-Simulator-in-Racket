@@ -6,7 +6,7 @@
 ; n = among of i an j
 ; x = instructions
 (define (filter n x)
-  (cond ((and (not (null? x)) (number? n) (counter x) (>= 6 n) (<= 2 n) (size n x) (format x)) #t)
+  (cond ((and (list? x) (not (null? x)) (counter x) (real? n) (positive? n) (exact-integer? n) (>= 6 n) (<= 2 n) (size n x) (format x)) #t)
         (else #f)))
 
 ; It checks if every instruction have 3 characters and if they come in a string
@@ -35,7 +35,7 @@
 
 ; It checks if a gived cube is allowed or not
 (define (user_filter n x)
-  (cond((and (not (null? x)) (faces x) (config n x)) #t )
+  (cond((and (list? x) (not (null? x)) (faces x) (config n x)) #t )
        (else #f)))
 
 ; It checks the among of faces

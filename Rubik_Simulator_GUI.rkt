@@ -53,14 +53,12 @@
   )
 
 (define (RS X Cube Movs)
-  (cond ((null? Cube) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
+  (cond ( (and (null? Cube) (number? X) (real? X) (positive? X) (exact-integer? X)) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
     ((and (user_filter X Cube) (filter X Movs)) (drawCube X Cube) (drawingCycle X Cube Movs))
     (else (print "found Error in validation")(close-viewport ventana))
   )
 )
 
-;(RS 2 '((("green" "green") ("green" "green")) (("red" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))
-;                                               (("white" "white") ("white" "white"))) '("C2A" "F1D"))
+;(RS 2 '((("green" "green") ("green" "green")) (("red" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))(("white" "white") ("white" "white"))) '("C2A" "F1D"))
 
-(RS 3 '() '("F1D" "C3B" "C3B"))
-
+(RS 6 '() '("F1D" "C3B" "C3B" "F2I" "C1A" "C4A" "F6D" "C5A" "F2I"))
