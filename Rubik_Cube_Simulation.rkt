@@ -137,7 +137,7 @@
 (define (generateChangedRow_R X originalCube i j new_i face new_face i_inverted)
   (cond ((equal? X j) (append '()))
         ((and (equal? face 3) (equal? i (- X new_i 1))) (append (list (getValue originalCube new_face new_i (- X j 1))) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
-        ((and (equal? new_face 3) (equal? i (- X new_i 1))) (print "hola") (append (list (getValue originalCube new_face new_i (- X j 1))) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
+        ((and (equal? new_face 3) (equal? i (- X new_i 1)))(append (list (getValue originalCube new_face new_i (- X j 1))) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
   ((and (equal? i new_i) (not (equal? face 3)) (not (equal? new_face 3))) (append (list (getValue originalCube new_face i j)) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted) ))
   (else (append (list (getValue originalCube face i j)) (generateChangedRow_R X originalCube i (+ 1 j) new_i face new_face i_inverted)))
   )

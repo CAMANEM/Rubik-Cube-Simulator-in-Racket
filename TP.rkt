@@ -66,5 +66,5 @@
         ((list? (member (car x) c)) (check (cdr x) c))
         (else #f)))
 
-(user_filter 2 '( (("green" "green") ("green" "green")) (("ble" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))
-                                               (("white" "white") ("white" "white"))))
+;(user_filter 2 '( (("green" "green") ("green" "green")) (("ble" "red") ("red" "red")) (("blue" "blue") ("blue" "blue")) (("orange" "orange") ("orange" "orange")) (("yellow" "yellow") ("yellow" "yellow"))
+;                                               (("white" "white") ("white" "white"))))
