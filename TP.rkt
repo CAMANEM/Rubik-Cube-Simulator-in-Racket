@@ -1,4 +1,6 @@
 #lang scheme
+(provide filter)
+(provide user_filter)
 
 ; It checks if the list provited isn`t null and calls "counter", "size", "format"
 ; n = among of i an j

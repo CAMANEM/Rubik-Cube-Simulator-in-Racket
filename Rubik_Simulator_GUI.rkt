@@ -61,7 +61,7 @@
 
 (define (RS X Cube Movs)
   (cond ((null? Cube) (RS X (buildCube X '("green" "red" "blue" "orange" "yellow" "white")) Movs) )
-    ((filter X Movs) (dibujarMatriz X Cube) (drawingCycle X Cube Movs))
+    ((and (user_filter X Cube)(filter X Movs)) (dibujarMatriz X Cube) (drawingCycle X Cube Movs))
     (else (print "found Error in validation")(close-viewport ventana))
   )
 )
