@@ -1,6 +1,6 @@
 # Rubik Cube Simulator in Racket
 
-This is simulation of a rubik's cube movements, where the user gives the movements that wants to do, and optionaly an intial state of the cube. 
+This is a simulation of a rubik's cube movements, where the user gives the movements that wants to do, and optionaly an intial state of the cube. 
 
 This program was made as a homework for the *compiler and interpreter languages* course of the career Computer Engineering in the Instituto Tecnológíco de Costa Rica.
 
